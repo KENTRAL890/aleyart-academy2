@@ -1,0 +1,44 @@
+{
+  "folders": [
+    {
+      "name": "Aleyart Academy",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.fontSize": 14,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "files.exclude": {
+      "**/node_modules": true
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+      "*.js": "${capture}.test.js",
+      "package.json": "package-lock.json, .env, .gitignore"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "PKief.material-icon-theme",
+      "formulahendry.auto-rename-tag",
+      "ritwickdey.LiveServer"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Start Backend Server",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/backend/server.js",
+        "envFile": "${workspaceFolder}/backend/.env",
+        "console": "integratedTerminal",
+        "restart": true
+      }
+    ]
+  }
+}

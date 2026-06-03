@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "PKief.material-icon-theme",
+    "ritwickdey.LiveServer",
+    "ms-vscode.vscode-node-extensions-pack"
+  ]
+}

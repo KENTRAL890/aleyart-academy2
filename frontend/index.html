@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Aleyart Academy — School Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+:root {
+  --navy: #0d1f36;
+  --navy2: #1a3a5c;
+  --green: #0a5c46;
+  --green2: #0d7a5f;
+  --gold: #c9a84c;
+  --gold2: #e8c56d;
+  --red: #b91c1c;
+  --orange: #d97706;
+  --purple: #6d28d9;
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --surface2: #f8f9fb;
+  --border: #e2e5eb;
+  --text: #0d1f36;
+  --text2: #4a5568;
+  --text3: #9aa3b0;
+  --shadow: 0 2px 12px rgba(13,31,54,0.10);
+  --shadow-lg: 0 8px 32px rgba(13,31,54,0.15);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+input,select,textarea{font-family:'DM Sans',sans-serif;}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--navy2);outline-offset:1px;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#c0c8d6;border-radius:3px;}
+
+/* ── Layout ── */
+#app{display:flex;height:100vh;overflow:hidden;}
+.sidebar{width:220px;background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.content{flex:1;overflow-y:auto;padding:20px;}
+
+/* ── Sidebar ── */
+.sidebar-brand{padding:18px 14px 14px;border-bottom:1px solid rgba(255,255,255,.08);}
+.brand-logo{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--gold));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:white;flex-shrink:0;position:relative;}
+.brand-logo::after{content:'';position:absolute;inset:-2px;border-radius:50%;border:2px solid rgba(201,168,76,.4);}
+.brand-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:800;color:white;line-height:1.2;margin-top:8px;}
+.brand-motto{font-size:10px;color:var(--gold2);font-style:italic;margin-top:2px;}
+.brand-sub{font-size:9.5px;color:rgba(255,255,255,.4);margin-top:2px;}
+.nav-section{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.3);padding:12px 14px 4px;font-weight:600;}
+.nav-btn{width:100%;display:flex;align-items:center;gap:9px;padding:10px 14px;background:transparent;border:none;border-left:3px solid transparent;color:rgba(255,255,255,.65);font-size:13px;font-weight:500;text-align:left;transition:all .15s;}
+.nav-btn:hover{background:rgba(255,255,255,.07);color:white;}
+.nav-btn.active{background:rgba(255,255,255,.12);border-left-color:var(--gold);color:white;}
+.nav-btn i{font-size:17px;width:20px;}
+.nav-spacer{flex:1;}
+.sidebar-user{padding:12px 14px;border-top:1px solid rgba(255,255,255,.08);}
+.user-name{font-size:12px;font-weight:700;color:white;}
+.user-role{font-size:10px;color:rgba(255,255,255,.4);text-transform:capitalize;}
+.sign-out-btn{width:100%;margin-top:8px;padding:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:7px;color:rgba(255,255,255,.7);font-size:12px;}
+.sign-out-btn:hover{background:rgba(255,255,255,.12);color:white;}
+
+/* ── Login ── */
+.login-page{min-height:100vh;background:linear-gradient(135deg,#050e1a 0%,#0d2a1e 60%,#1a3a5c 100%);display:flex;align-items:center;justify-content:center;padding:1rem;}
+.login-card{background:white;border-radius:20px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,0.4);}
+.login-logo{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--green));margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;position:relative;}
+.login-logo::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--gold);opacity:.6;}
+.login-logo span{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:white;}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;transition:all .15s;}
+.btn-primary{background:var(--navy);color:white;}
+.btn-primary:hover{background:var(--navy2);}
+.btn-success{background:var(--green);color:white;}
+.btn-success:hover{background:var(--green2);}
+.btn-danger{background:var(--red);color:white;}
+.btn-ghost{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--border);}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:6px;}
+.btn-icon{padding:6px;border-radius:6px;background:transparent;border:1px solid var(--border);}
+.btn-icon:hover{background:var(--surface2);}
+.btn-gold{background:var(--gold);color:var(--navy);font-weight:700;}
+.btn-gold:hover{background:var(--gold2);}
+
+/* ── Forms ── */
+.form-label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:4px;}
+.form-input{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text);background:white;transition:border-color .15s;}
+.form-input:focus{border-color:var(--navy2);}
+.form-select{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:white;color:var(--text);}
+.form-grid{display:grid;gap:12px;}
+.form-grid-2{grid-template-columns:1fr 1fr;}
+.form-grid-3{grid-template-columns:1fr 1fr 1fr;}
+.form-grid-4{grid-template-columns:1fr 1fr 1fr 1fr;}
+
+/* ── Cards ── */
+.card{background:var(--surface);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow);}
+.card-sm{background:var(--surface);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);}
+.stat-card{background:var(--surface);border-radius:var(--radius);padding:1.1rem;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;}
+.stat-icon{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.stat-icon i{font-size:22px;}
+.stat-value{font-size:22px;font-weight:800;color:var(--navy);line-height:1;}
+.stat-label{font-size:12px;color:var(--text3);margin-top:3px;}
+
+/* ── Tables ── */
+.table-wrap{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.table-wrap table{width:100%;border-collapse:collapse;}
+.table-wrap th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:white;background:var(--navy);white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;}
+.table-wrap td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.table-wrap tr:last-child td{border-bottom:none;}
+.table-wrap tr:nth-child(even) td{background:var(--surface2);}
+.table-wrap tr:hover td{background:#eef2f8;}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+
+/* ── Page header ── */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.page-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--navy);}
+
+/* ── Score inputs ── */
+.score-input{width:68px;padding:5px 7px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;text-align:center;}
+.score-input:focus{border-color:var(--navy2);outline:none;}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--surface2);padding:4px;border-radius:10px;width:fit-content;}
+.tab-btn{padding:7px 18px;border:none;border-radius:7px;font-size:13px;font-weight:600;color:var(--text2);background:transparent;}
+.tab-btn.active{background:var(--surface);color:var(--navy);box-shadow:var(--shadow);}
+
+/* ── Modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;flex-direction:column;align-items:center;overflow-y:auto;padding:1rem;}
+.modal-box{background:white;border-radius:16px;padding:1.5rem;width:100%;max-width:520px;margin-top:auto;margin-bottom:auto;box-shadow:var(--shadow-lg);}
+
+/* ── Print overlay ── */
+.print-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;flex-direction:column;align-items:center;overflow-y:auto;padding:1rem;}
+.print-controls{display:flex;gap:10px;margin-bottom:14px;position:sticky;top:0;z-index:1;}
+
+/* ── Alerts ── */
+.alert{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:12px;}
+.alert-success{background:#dcfce7;color:#166534;}
+.alert-error{background:#fee2e2;color:#991b1b;}
+
+/* ── Loading ── */
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-center{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--text3);font-size:14px;gap:10px;}
+
+/* ── Grade badges ── */
+.grade-A{background:#dcfce7;color:#166534;}
+.grade-P{background:#dbeafe;color:#1e40af;}
+.grade-AP{background:#fef3c7;color:#92400e;}
+.grade-D{background:#ede9fe;color:#5b21b6;}
+.grade-B{background:#fee2e2;color:#991b1b;}
+
+/* ── Responsive ── */
+@media(max-width:768px){.sidebar{width:0;position:absolute;z-index:100;}.content{padding:12px;}}
+
+/* ── PRINT STYLES ── */
+@media print {
+  .no-print{display:none!important;}
+  body{background:white;}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════════════════════════════
+const API_BASE = window.API_BASE || 'http://localhost:4000/api';
+const SCHOOL = { name:'Aleyart Academy', motto:'Seeking Wisdom', location:'Odokor-Official Town', pobox:'P.O BOX 4183', phone:'0553797233' };
+const CLASSES = ['Basic 1','Basic 2','Basic 3','Basic 4','Basic 5','Basic 6','Basic 7','Basic 8'];
+const SUBJECTS_1_6 = ['English Language','Mathematics','Science','Computing','Creative Arts','RME','History','French','GA/TWI'];
+const SUBJECTS_7_8 = ['English Language','Mathematics','Science','Computing','Creative Arts','RME','Social Studies','Career Tech','French','GA/TWI'];
+const CORE_SUBJECTS = ['English Language','Mathematics','Science','Social Studies'];
+const TERMS = ['Term 1','Term 2','Term 3'];
+
+function getSubjects(cls){ return parseInt(cls.split(' ')[1])<=6 ? SUBJECTS_1_6 : SUBJECTS_7_8; }
+function isUpper(cls){ return parseInt(cls.split(' ')[1])>=7; }
+
+function getGrade(score){
+  if(score>=80) return {grade:'A',remark:'Advance'};
+  if(score>=68) return {grade:'P',remark:'Proficient'};
+  if(score>=54) return {grade:'AP',remark:'Approaching Proficiency'};
+  if(score>=40) return {grade:'D',remark:'Developing'};
+  return {grade:'B',remark:'Beginning'};
+}
+
+function getAggGrade(score){
+  if(score>=90) return 1; if(score>=80) return 2; if(score>=70) return 3;
+  if(score>=60) return 4; if(score>=55) return 5; if(score>=50) return 6;
+  if(score>=40) return 7; if(score>=35) return 8; return 9;
+}
+
+function computeAggregate(subjectScores, subjects){
+  const coreItems = CORE_SUBJECTS.map(s=>({subject:s,total:subjectScores[s]||0,grade:getAggGrade(subjectScores[s]||0)}));
+  const electiveItems = subjects.filter(s=>!CORE_SUBJECTS.includes(s))
+    .map(s=>({subject:s,total:subjectScores[s]||0,grade:getAggGrade(subjectScores[s]||0)}))
+    .sort((a,b)=>a.grade-b.grade).slice(0,2);
+  const all6=[...coreItems,...electiveItems];
+  return {all6, aggregateSum:all6.reduce((acc,s)=>acc+s.grade,0)};
+}
+
+function numberToWords(n){
+  const ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+  const tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+  if(n===0) return 'Zero';
+  if(n<20) return ones[n];
+  if(n<100) return tens[Math.floor(n/10)]+(n%10?' '+ones[n%10]:'');
+  if(n<1000) return ones[Math.floor(n/100)]+' Hundred'+(n%100?' '+numberToWords(n%100):'');
+  if(n<10000) return ones[Math.floor(n/1000)]+' Thousand'+(n%1000?' '+numberToWords(n%1000):'');
+  return numberToWords(Math.floor(n/1000))+' Thousand'+(n%1000?' '+numberToWords(n%1000):'');
+}
+
+function fmtMoney(v){ return 'GH₵'+parseFloat(v||0).toLocaleString('en',{minimumFractionDigits:2}); }
+function fmtDate(d){ if(!d) return '—'; return new Date(d).toLocaleDateString('en-GB'); }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// API LAYER
+// ══════════════════════════════════════════════════════════════════════════════
+let authToken = localStorage.getItem('aa_token')||'';
+let currentUser = JSON.parse(localStorage.getItem('aa_user')||'null');
+
+async function api(method, path, body){
+  const res = await fetch(API_BASE+path, {
+    method, headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const data = await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error||'Request failed');
+  return data;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════════════════
+let state = {
+  page:'login', selectedClass: CLASSES[0], selectedTerm:'Term 1',
+  students:[], classes:[], users:[], stats:[], assessments:[],
+  loading:false, error:'', success:'',
+  modal:null, // {type, data}
+  printData:null,
+};
+
+function setState(patch){ Object.assign(state,patch); render(); }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RENDER ENGINE
+// ══════════════════════════════════════════════════════════════════════════════
+const app = document.getElementById('app');
+
+function render(){
+  if(state.page==='login'){ app.innerHTML=''; app.appendChild(renderLogin()); return; }
+  app.innerHTML='';
+  const layout = document.createElement('div');
+  layout.id='app'; layout.style.display='flex'; layout.style.height='100vh'; layout.style.overflow='hidden';
+  layout.appendChild(renderSidebar());
+  const main = document.createElement('div');
+  main.className='main';
+  main.appendChild(renderTopbar());
+  const content = document.createElement('div');
+  content.className='content';
+  content.appendChild(renderPage());
+  main.appendChild(content);
+  layout.appendChild(main);
+  app.appendChild(layout);
+  if(state.modal) app.appendChild(renderModal());
+  if(state.printData) app.appendChild(renderPrintOverlay());
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════════════════════════════════════
+function renderLogin(){
+  const div=el('div',{className:'login-page'});
+  div.innerHTML=`
+    <div class="login-card">
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <div class="login-logo" style="margin:0 auto 1rem;"><span>A</span></div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--navy);">${SCHOOL.name}</h1>
+        <p style="font-size:12px;color:var(--green2);font-style:italic;font-weight:600;margin:3px 0;">"${SCHOOL.motto}"</p>
+        <p style="font-size:11px;color:var(--text3);margin-top:2px;">${SCHOOL.location} · ${SCHOOL.phone}</p>
+      </div>
+      <div id="login-error" class="alert alert-error" style="display:none;"></div>
+      <div style="margin-bottom:12px;">
+        <label class="form-label">Username</label>
+        <input id="l-user" class="form-input" placeholder="Enter username" autocomplete="username"/>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label class="form-label">Password</label>
+        <input id="l-pass" type="password" class="form-input" placeholder="Enter password" autocomplete="current-password"/>
+      </div>
+      <button id="l-btn" class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px;">
+        <i class="ti ti-login"></i> Sign In
+      </button>
+      <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:14px;">Aleyart Academy School Management System</p>
+    </div>`;
+  div.querySelector('#l-btn').onclick=doLogin;
+  div.querySelector('#l-pass').onkeydown=e=>{ if(e.key==='Enter') doLogin(); };
+  div.querySelector('#l-user').onkeydown=e=>{ if(e.key==='Enter') div.querySelector('#l-pass').focus(); };
+  return div;
+}
+
+async function doLogin(){
+  const u=document.getElementById('l-user')?.value?.trim();
+  const p=document.getElementById('l-pass')?.value;
+  const errEl=document.getElementById('login-error');
+  const btn=document.getElementById('l-btn');
+  if(!u||!p){ showLoginErr('Please enter username and password'); return; }
+  btn.innerHTML='<span class="spinner"></span> Signing in...';
+  btn.disabled=true;
+  try {
+    const data=await api('POST','/auth/login',{username:u,password:p});
+    authToken=data.token; currentUser=data.user;
+    localStorage.setItem('aa_token',authToken);
+    localStorage.setItem('aa_user',JSON.stringify(currentUser));
+    setState({page:'dashboard', selectedClass: currentUser.assignedClass||CLASSES[0]});
+    loadInitialData();
+  } catch(e){
+    showLoginErr(e.message);
+    btn.innerHTML='<i class="ti ti-login"></i> Sign In'; btn.disabled=false;
+  }
+}
+function showLoginErr(msg){
+  const el=document.getElementById('login-error');
+  if(el){el.textContent=msg;el.style.display='block';}
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SIDEBAR
+// ══════════════════════════════════════════════════════════════════════════════
+function renderSidebar(){
+  const isAdmin=currentUser?.role==='admin';
+  const pages=[
+    {k:'dashboard',label:'Dashboard',icon:'ti-layout-dashboard'},
+    {k:'students',label:'Students',icon:'ti-users'},
+    {k:'assessment',label:'Assessment',icon:'ti-clipboard-list'},
+    {k:'reports',label:'Reports',icon:'ti-file-text'},
+    {k:'fees',label:'Fees',icon:'ti-cash'},
+    ...(isAdmin?[{k:'admin',label:'Administration',icon:'ti-settings'}]:[]),
+  ];
+  const div=el('div',{className:'sidebar'});
+  div.innerHTML=`
+    <div class="sidebar-brand">
+      <div class="brand-logo">A</div>
+      <div class="brand-name">${SCHOOL.name}</div>
+      <div class="brand-motto">"${SCHOOL.motto}"</div>
+      <div class="brand-sub">${SCHOOL.location}</div>
+    </div>
+    <div style="padding:8px 0;flex:1;overflow-y:auto;">
+      ${pages.map(p=>`<button class="nav-btn${state.page===p.k?' active':''}" data-page="${p.k}">
+        <i class="ti ${p.icon}"></i>${p.label}
+      </button>`).join('')}
+    </div>
+    <div class="sidebar-user">
+      <div class="user-name">${currentUser?.name||'User'}</div>
+      <div class="user-role">${currentUser?.role}${currentUser?.assignedClass?' · '+currentUser.assignedClass:''}</div>
+      <button class="sign-out-btn" id="sign-out"><i class="ti ti-logout" style="font-size:13px;"></i> Sign Out</button>
+    </div>`;
+  div.querySelectorAll('[data-page]').forEach(btn=>{ btn.onclick=()=>{ setState({page:btn.dataset.page}); loadPageData(btn.dataset.page); }; });
+  div.querySelector('#sign-out').onclick=()=>{
+    authToken=''; currentUser=null;
+    localStorage.removeItem('aa_token'); localStorage.removeItem('aa_user');
+    setState({page:'login',students:[],classes:[],users:[],stats:[]});
+  };
+  return div;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// TOPBAR
+// ══════════════════════════════════════════════════════════════════════════════
+function renderTopbar(){
+  const isAdmin=currentUser?.role==='admin';
+  const div=el('div',{className:'topbar'});
+  const pageLabels={dashboard:'Dashboard',students:'Students',assessment:'Assessment',reports:'Terminal Reports',fees:'Fees',admin:'Administration'};
+  div.innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-family:'Playfair Display',serif;font-size:17px;font-weight:800;color:var(--navy);">${pageLabels[state.page]||''}</span>
+      ${state.error?`<span style="color:var(--red);font-size:12px;font-weight:500;">${state.error}</span>`:''}
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      ${isAdmin && state.page!=='admin' ? `
+        <label style="font-size:12px;color:var(--text2);font-weight:600;">Class:</label>
+        <select id="class-sel" class="form-select" style="width:auto;padding:5px 10px;font-size:13px;">
+          ${CLASSES.map(c=>`<option value="${c}"${state.selectedClass===c?' selected':''}>${c}</option>`).join('')}
+        </select>` : ''}
+      ${state.page==='assessment'||state.page==='reports' ? `
+        <label style="font-size:12px;color:var(--text2);font-weight:600;">Term:</label>
+        <select id="term-sel" class="form-select" style="width:auto;padding:5px 10px;font-size:13px;">
+          ${TERMS.map(t=>`<option value="${t}"${state.selectedTerm===t?' selected':''}>${t}</option>`).join('')}
+        </select>` : ''}
+      <button onclick="loadPageData(state.page)" class="btn btn-ghost btn-sm"><i class="ti ti-refresh"></i></button>
+    </div>`;
+  const cs=div.querySelector('#class-sel');
+  if(cs) cs.onchange=e=>{ setState({selectedClass:e.target.value}); loadPageData(state.page); };
+  const ts=div.querySelector('#term-sel');
+  if(ts) ts.onchange=e=>{ setState({selectedTerm:e.target.value}); loadPageData(state.page); };
+  return div;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PAGES
+// ══════════════════════════════════════════════════════════════════════════════
+function renderPage(){
+  switch(state.page){
+    case 'dashboard': return renderDashboard();
+    case 'students': return renderStudents();
+    case 'assessment': return renderAssessment();
+    case 'reports': return renderReports();
+    case 'fees': return renderFees();
+    case 'admin': return renderAdmin();
+    default: return el('div',{},'Page not found');
+  }
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDashboard(){
+  const isAdmin=currentUser?.role==='admin';
+  const div=el('div');
+  const myClass=state.selectedClass;
+  const classInfo=state.classes.find(c=>c.name===myClass)||{fee_amount:0,fee_term:'',student_count:0};
+  const myStudents=state.students.filter(s=>s.class_name===myClass);
+  const feeAmt=parseFloat(classInfo.fee_amount||0);
+  const collected=myStudents.reduce((a,s)=>a+parseFloat(s.fees_paid||0),0);
+  const owed=Math.max(0,feeAmt*myStudents.length-collected);
+
+  const stats=isAdmin?[
+    {label:'Total Students',value:state.students.length,icon:'ti-users',bg:'#dbeafe',ic:'#1e40af'},
+    {label:'Total Classes',value:CLASSES.length,icon:'ti-school',bg:'#dcfce7',ic:'#166534'},
+    {label:`${myClass} Collected`,value:fmtMoney(collected),icon:'ti-cash',bg:'#dcfce7',ic:'#166534'},
+    {label:`${myClass} Owed`,value:fmtMoney(owed),icon:'ti-alert-circle',bg:'#fee2e2',ic:'#991b1b'},
+  ]:[
+    {label:'My Students',value:myStudents.length,icon:'ti-users',bg:'#dbeafe',ic:'#1e40af'},
+    {label:'Fees Collected',value:fmtMoney(collected),icon:'ti-cash',bg:'#dcfce7',ic:'#166534'},
+    {label:'Fees Owed',value:fmtMoney(owed),icon:'ti-alert-circle',bg:'#fee2e2',ic:'#991b1b'},
+    {label:'Fee per Student',value:fmtMoney(feeAmt),icon:'ti-receipt',bg:'#fef3c7',ic:'#92400e'},
+  ];
+
+  div.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px;">
+      ${stats.map(s=>`
+        <div class="stat-card">
+          <div class="stat-icon" style="background:${s.bg};"><i class="ti ${s.icon}" style="color:${s.ic};"></i></div>
+          <div><div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div></div>
+        </div>`).join('')}
+    </div>`;
+
+  if(isAdmin && state.classes.length){
+    const tableDiv=el('div',{className:'card'});
+    tableDiv.innerHTML=`<div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:14px;">All Classes Overview</div>`;
+    const tableWrap=el('div',{className:'table-wrap'});
+    const studentsByClass={};
+    state.students.forEach(s=>{ if(!studentsByClass[s.class_name]) studentsByClass[s.class_name]=[]; studentsByClass[s.class_name].push(s); });
+    tableWrap.innerHTML=`<table><thead><tr>
+      <th>Class</th><th>Teacher</th><th>Students</th><th>Fee/Student</th><th>Collected</th><th>Owed</th><th>Term</th>
+    </tr></thead><tbody>${state.classes.map(c=>{
+      const ss=studentsByClass[c.name]||[];
+      const fa=parseFloat(c.fee_amount||0);
+      const col=ss.reduce((a,s)=>a+parseFloat(s.fees_paid||0),0);
+      const ow=Math.max(0,fa*ss.length-col);
+      return `<tr>
+        <td><strong style="color:var(--navy);">${c.name}</strong></td>
+        <td>${c.teacher_name||'<span style="color:var(--text3)">Not assigned</span>'}</td>
+        <td>${ss.length}</td>
+        <td>${fmtMoney(fa)}</td>
+        <td style="color:var(--green);font-weight:700;">${fmtMoney(col)}</td>
+        <td style="color:${ow>0?'var(--red)':'var(--green)'};font-weight:700;">${fmtMoney(ow)}</td>
+        <td style="font-size:12px;color:var(--text2);">${c.fee_term||'—'}</td>
+      </tr>`;}).join('')}</tbody></table>`;
+    tableDiv.appendChild(tableWrap);
+    div.appendChild(tableDiv);
+  }
+  return div;
+}
+
+// ── STUDENTS ──────────────────────────────────────────────────────────────────
+function renderStudents(){
+  const myClass=state.selectedClass;
+  const myStudents=state.students.filter(s=>s.class_name===myClass).sort((a,b)=>a.full_name.localeCompare(b.full_name));
+  const div=el('div');
+
+  const header=el('div',{className:'page-header'});
+  header.innerHTML=`<div><div class="page-title">${myClass} — Students</div>
+    <div style="font-size:13px;color:var(--text2);margin-top:2px;">${myStudents.length} student${myStudents.length!==1?'s':''} enrolled</div></div>`;
+  const addBtn=el('button',{className:'btn btn-primary'},'<i class="ti ti-user-plus"></i> Add Student');
+  addBtn.onclick=()=>openStudentModal();
+  header.appendChild(addBtn);
+  div.appendChild(header);
+
+  if(myStudents.length===0){
+    div.appendChild(emptyState('ti-users',`No students in ${myClass} yet`,'Click "Add Student" to enroll students'));
+    return div;
+  }
+
+  const tableDiv=el('div',{className:'table-wrap'});
+  tableDiv.innerHTML=`<table><thead><tr>
+    <th>#</th><th>Full Name</th><th>Gender</th><th>Date of Birth</th><th>Enrolled</th><th>Last Payment</th><th>Actions</th>
+  </tr></thead><tbody>${myStudents.map((s,i)=>`<tr>
+    <td style="color:var(--text3);font-weight:600;">${i+1}</td>
+    <td><strong style="color:var(--navy);">${s.full_name}</strong></td>
+    <td><span class="badge" style="background:${s.gender==='Female'?'#fce7f3':'#dbeafe'};color:${s.gender==='Female'?'#be185d':'#1e40af'};">${s.gender}</span></td>
+    <td>${fmtDate(s.date_of_birth)}</td>
+    <td style="font-size:12px;color:var(--text2);">${fmtDate(s.created_at)}</td>
+    <td style="font-size:12px;color:${s.last_payment_date?'var(--green)':'var(--text3)'};">${s.last_payment_date?fmtDate(s.last_payment_date):'No payment'}</td>
+    <td style="display:flex;gap:6px;">
+      <button class="btn btn-ghost btn-sm" onclick="openStudentModal(${s.id})"><i class="ti ti-edit"></i></button>
+      ${currentUser?.role==='admin'?`<button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;" onclick="deleteStudent(${s.id})"><i class="ti ti-trash"></i></button>`:''}
+    </td>
+  </tr>`).join('')}</tbody></table>`;
+  div.appendChild(tableDiv);
+  return div;
+}
+
+async function openStudentModal(id){
+  let student=null;
+  if(id) student=state.students.find(s=>s.id===id);
+  setState({modal:{type:'student',student}});
+}
+
+async function saveStudent(e){
+  e.preventDefault();
+  const fd=new FormData(e.target);
+  const data={full_name:fd.get('full_name'),class_name:state.selectedClass,gender:fd.get('gender'),date_of_birth:fd.get('date_of_birth')||null};
+  const id=fd.get('id');
+  try{
+    if(id){ await api('PUT',`/students/${id}`,data); }
+    else { await api('POST','/students',data); }
+    setState({modal:null});
+    await loadStudents();
+  }catch(e){ alert(e.message); }
+}
+
+async function deleteStudent(id){
+  if(!confirm('Delete this student? This will remove all their records.')) return;
+  await api('DELETE',`/students/${id}`);
+  await loadStudents();
+}
+
+// ── ASSESSMENT ────────────────────────────────────────────────────────────────
+function renderAssessment(){
+  const myClass=state.selectedClass;
+  const term=state.selectedTerm;
+  const subjects=getSubjects(myClass);
+  const myStudents=state.students.filter(s=>s.class_name===myClass).sort((a,b)=>a.full_name.localeCompare(b.full_name));
+  const div=el('div');
+
+  if(myStudents.length===0){
+    div.appendChild(emptyState('ti-clipboard-list',`No students in ${myClass}`,`Add students first`));
+    return div;
+  }
+
+  // Build assessment lookup
+  const aMap={};
+  state.assessments.forEach(a=>{ aMap[`${a.student_id}_${a.subject}`]=a; });
+
+  const header=el('div',{className:'page-header'});
+  header.innerHTML=`<div>
+    <div class="page-title">Assessment — ${myClass}</div>
+    <div style="font-size:13px;color:var(--text2);">${term} · Enter class score (max 50) and exam score (max 50)</div>
+  </div>`;
+  const saveBtn=el('button',{className:'btn btn-success',id:'save-assess-btn'},'<i class="ti ti-device-floppy"></i> Save All Scores');
+  saveBtn.onclick=saveAssessments;
+  header.appendChild(saveBtn);
+  div.appendChild(header);
+
+  // Subject tabs
+  const tabsDiv=el('div',{className:'tabs',id:'subj-tabs'});
+  subjects.forEach((s,i)=>{
+    const tb=el('button',{className:`tab-btn${i===0?' active':''}`,dataset:{subj:s}});
+    tb.textContent=s.length>12?s.substring(0,12)+'…':s;
+    tb.title=s;
+    tb.onclick=()=>{ tabsDiv.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); tb.classList.add('active'); switchSubject(s); };
+    tabsDiv.appendChild(tb);
+  });
+  div.appendChild(tabsDiv);
+
+  const tableWrap=el('div',{className:'table-wrap',id:'assess-table'});
+  tableWrap.appendChild(buildAssessTable(myStudents,subjects[0],aMap,myClass));
+  div.appendChild(tableWrap);
+  return div;
+}
+
+function buildAssessTable(students,subj,aMap,myClass){
+  const table=el('table',{style:'width:100%;border-collapse:collapse;'});
+  table.innerHTML=`<thead><tr>
+    <th>#</th><th>Student Name</th>
+    <th>Class Score <small style="font-weight:400;">/50</small></th>
+    <th>Exam Score <small style="font-weight:400;">/50</small></th>
+    <th>Total</th><th>Grade</th><th>Remark</th>
+  </tr></thead>`;
+  const tbody=el('tbody');
+  students.forEach((st,i)=>{
+    const a=aMap[`${st.id}_${subj}`]||{};
+    const cls=a.class_score!==undefined?a.class_score:'';
+    const exam=a.exam_score!==undefined?a.exam_score:'';
+    const total=a.total!==undefined?a.total:'';
+    const {grade,remark}=total!==''?getGrade(total):{grade:'',remark:''};
+    const tr=el('tr',{style:`border-bottom:1px solid var(--border);background:${i%2===0?'white':'var(--surface2)'}`,dataset:{sid:st.id}});
+    tr.innerHTML=`
+      <td style="padding:8px 14px;color:var(--text3);font-weight:600;">${i+1}</td>
+      <td style="padding:8px 14px;font-weight:700;color:var(--navy);">${st.full_name}</td>
+      <td style="padding:8px 14px;"><input type="number" class="score-input cs-input" min="0" max="50" value="${cls}" data-sid="${st.id}" data-subj="${subj}" placeholder="0-50"/></td>
+      <td style="padding:8px 14px;"><input type="number" class="score-input ex-input" min="0" max="50" value="${exam}" data-sid="${st.id}" data-subj="${subj}" placeholder="0-50"/></td>
+      <td style="padding:8px 14px;font-weight:800;font-size:15px;color:var(--navy);" class="total-cell">${total!==''?total:'—'}</td>
+      <td style="padding:8px 14px;" class="grade-cell">${grade?`<span class="badge grade-${grade}">${grade}</span>`:''}</td>
+      <td style="padding:8px 14px;font-size:12px;color:var(--text2);" class="remark-cell">${remark}</td>`;
+    // Live calculation
+    tr.querySelectorAll('.cs-input,.ex-input').forEach(inp=>inp.addEventListener('input',()=>{
+      const cs=Math.min(parseFloat(tr.querySelector('.cs-input').value)||0,50);
+      const ex=Math.min(parseFloat(tr.querySelector('.ex-input').value)||0,50);
+      const tot=cs+ex;
+      const {grade:g,remark:r}=getGrade(tot);
+      tr.querySelector('.total-cell').textContent=tot;
+      tr.querySelector('.grade-cell').innerHTML=`<span class="badge grade-${g}">${g}</span>`;
+      tr.querySelector('.remark-cell').textContent=r;
+    }));
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  return table;
+}
+
+function switchSubject(subj){
+  const myClass=state.selectedClass;
+  const myStudents=state.students.filter(s=>s.class_name===myClass).sort((a,b)=>a.full_name.localeCompare(b.full_name));
+  const aMap={};
+  state.assessments.forEach(a=>{ aMap[`${a.student_id}_${a.subject}`]=a; });
+  const wrap=document.getElementById('assess-table');
+  if(wrap){ wrap.innerHTML=''; wrap.appendChild(buildAssessTable(myStudents,subj,aMap,myClass)); }
+}
+
+async function saveAssessments(){
+  const btn=document.getElementById('save-assess-btn');
+  if(!btn) return;
+  const term=state.selectedTerm;
+  const assessments=[];
+  document.querySelectorAll('.cs-input').forEach(inp=>{
+    const ex=document.querySelector(`.ex-input[data-sid="${inp.dataset.sid}"]`);
+    assessments.push({student_id:inp.dataset.sid,term,subject:inp.dataset.subj,class_score:inp.value||0,exam_score:ex?.value||0});
+  });
+  btn.innerHTML='<span class="spinner"></span> Saving...'; btn.disabled=true;
+  try{
+    await api('POST','/assessments/batch',{assessments});
+    await loadAssessments();
+    btn.innerHTML='<i class="ti ti-check"></i> Saved!'; btn.style.background='#166534';
+    setTimeout(()=>{ btn.innerHTML='<i class="ti ti-device-floppy"></i> Save All Scores'; btn.style.background=''; btn.disabled=false; },2000);
+  }catch(e){ alert(e.message); btn.innerHTML='<i class="ti ti-device-floppy"></i> Save All Scores'; btn.disabled=false; }
+}
+
+// ── REPORTS ───────────────────────────────────────────────────────────────────
+function renderReports(){
+  const myClass=state.selectedClass;
+  const term=state.selectedTerm;
+  const subjects=getSubjects(myClass);
+  const myStudents=state.students.filter(s=>s.class_name===myClass);
+  const div=el('div');
+
+  const aMap={};
+  state.assessments.filter(a=>a.term===term).forEach(a=>{ aMap[`${a.student_id}_${a.subject}`]=a; });
+
+  const ranked=[...myStudents].map(st=>{
+    let grand=0;
+    subjects.forEach(sub=>{ grand+=parseFloat(aMap[`${st.id}_${sub}`]?.total||0); });
+    return {...st,grandTotal:grand};
+  }).sort((a,b)=>b.grandTotal-a.grandTotal).map((st,i)=>({...st,position:i+1}));
+
+  const header=el('div',{className:'page-header'});
+  header.innerHTML=`<div><div class="page-title">Terminal Reports — ${myClass}</div>
+    <div style="font-size:13px;color:var(--text2);">${term} · ${ranked.length} student${ranked.length!==1?'s':''} · Click Print to open report</div></div>`;
+  div.appendChild(header);
+
+  if(ranked.length===0){ div.appendChild(emptyState('ti-file-text','No students found','Add students first')); return div; }
+
+  const tableWrap=el('div',{className:'table-wrap'});
+  tableWrap.innerHTML=`<table><thead><tr>
+    <th>Position</th><th>Student Name</th><th>Grand Total</th><th>Avg Grade</th><th>Action</th>
+  </tr></thead><tbody>${ranked.map((st,i)=>{
+    const avg=subjects.length?st.grandTotal/subjects.length:0;
+    const {grade}=getGrade(avg);
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    return `<tr>
+      <td><span style="font-weight:800;font-size:15px;color:${i<3?'var(--gold)':'var(--text2)'};">${medal}${st.position}</span></td>
+      <td><strong style="color:var(--navy);">${st.full_name}</strong></td>
+      <td><strong style="font-size:17px;color:var(--green2);">${st.grandTotal}</strong></td>
+      <td><span class="badge grade-${grade}">${grade}</span></td>
+      <td><button class="btn btn-primary btn-sm" onclick="printReport(${st.id})">
+        <i class="ti ti-printer"></i> Print Report</button></td>
+    </tr>`;}).join('')}</tbody></table>`;
+  div.appendChild(tableWrap);
+  return div;
+}
+
+async function printReport(studentId){
+  const term=state.selectedTerm;
+  const myClass=state.selectedClass;
+  const subjects=getSubjects(myClass);
+  const upper=isUpper(myClass);
+  const aMap={};
+  state.assessments.filter(a=>a.term===term&&a.student_id==studentId).forEach(a=>{ aMap[a.subject]=a; });
+  const myStudents=state.students.filter(s=>s.class_name===myClass);
+  const ranked=[...myStudents].map(st=>{
+    let grand=0;
+    subjects.forEach(sub=>{ grand+=parseFloat(state.assessments.find(a=>a.term===term&&a.student_id==st.id&&a.subject===sub)?.total||0); });
+    return {...st,grandTotal:grand};
+  }).sort((a,b)=>b.grandTotal-a.grandTotal).map((st,i)=>({...st,position:i+1}));
+  const student=ranked.find(s=>s.id==studentId);
+  if(!student) return;
+  const classInfo=state.classes.find(c=>c.name===myClass)||{};
+  let notes=null;
+  try{ notes=await api('GET',`/report-notes/${studentId}/${encodeURIComponent(term)}`); }catch{}
+
+  // Compute subject positions
+  const subPos={};
+  subjects.forEach(sub=>{
+    const sorted=[...myStudents].map(st=>({id:st.id,total:parseFloat(state.assessments.find(a=>a.term===term&&a.student_id==st.id&&a.subject===sub)?.total||0)})).sort((a,b)=>b.total-a.total);
+    subPos[sub]=sorted.findIndex(s=>s.id==studentId)+1;
+  });
+
+  setState({printData:{type:'report',student,term,myClass,subjects,upper,aMap,subPos,classInfo,notes,allCount:ranked.length}});
+}
+
+// ── FEES ──────────────────────────────────────────────────────────────────────
+function renderFees(){
+  const myClass=state.selectedClass;
+  const classInfo=state.classes.find(c=>c.name===myClass)||{fee_amount:0,fee_term:'',teacher_name:''};
+  const feeAmt=parseFloat(classInfo.fee_amount||0);
+  const myStudents=state.students.filter(s=>s.class_name===myClass).sort((a,b)=>a.full_name.localeCompare(b.full_name));
+  const collected=myStudents.reduce((a,s)=>a+parseFloat(s.fees_paid||0),0);
+  const totalOwed=Math.max(0,feeAmt*myStudents.length-collected);
+  const div=el('div');
+
+  // Summary
+  const summaryGrid=el('div',{style:'display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px;'});
+  summaryGrid.innerHTML=[
+    {label:'Fee per Student',value:fmtMoney(feeAmt),c:'#1e40af',bg:'#dbeafe',ic:'ti-cash'},
+    {label:'Total Collected',value:fmtMoney(collected),c:'#166534',bg:'#dcfce7',ic:'ti-circle-check'},
+    {label:'Total Owed',value:fmtMoney(totalOwed),c:totalOwed>0?'#991b1b':'#166534',bg:totalOwed>0?'#fee2e2':'#dcfce7',ic:'ti-alert-circle'},
+    {label:'Students',value:myStudents.length,c:'#5b21b6',bg:'#ede9fe',ic:'ti-users'},
+  ].map(s=>`<div class="stat-card"><div class="stat-icon" style="background:${s.bg};"><i class="ti ${s.ic}" style="color:${s.c};"></i></div>
+    <div><div class="stat-value" style="color:${s.c};">${s.value}</div><div class="stat-label">${s.label}</div></div></div>`).join('');
+  div.appendChild(summaryGrid);
+
+  // Fee config card
+  const feeCard=el('div',{className:'card',style:'margin-bottom:14px;'});
+  feeCard.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-weight:700;font-size:15px;color:var(--navy);">Fee Configuration — <span style="color:var(--green2);">${classInfo.fee_term||'—'}</span></div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px;">Current fee: <strong>${fmtMoney(feeAmt)}</strong> per student</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="edit-fee-btn"><i class="ti ti-edit"></i> Edit Fee Settings</button>
+    </div>
+    <div id="fee-edit-form" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+      <div class="form-grid form-grid-3">
+        <div><label class="form-label">Amount (GH₵)</label><input type="number" id="fee-amt-inp" class="form-input" value="${feeAmt}"/></div>
+        <div><label class="form-label">Term Label</label><input type="text" id="fee-term-inp" class="form-input" value="${classInfo.fee_term||''}"/></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn btn-success btn-sm" id="save-fee-btn"><i class="ti ti-device-floppy"></i> Save</button>
+        <button class="btn btn-ghost btn-sm" id="cancel-fee-btn">Cancel</button>
+      </div>
+    </div>`;
+  div.appendChild(feeCard);
+  setTimeout(()=>{
+    const efb=document.getElementById('edit-fee-btn');
+    const fef=document.getElementById('fee-edit-form');
+    const sfb=document.getElementById('save-fee-btn');
+    const cfb=document.getElementById('cancel-fee-btn');
+    if(efb) efb.onclick=()=>{ fef.style.display=fef.style.display==='none'?'block':'none'; };
+    if(cfb) cfb.onclick=()=>{ fef.style.display='none'; };
+    if(sfb) sfb.onclick=async()=>{
+      const amt=document.getElementById('fee-amt-inp')?.value;
+      const tm=document.getElementById('fee-term-inp')?.value;
+      await api('PUT',`/classes/${encodeURIComponent(myClass)}`,{fee_amount:parseFloat(amt)||0,fee_term:tm});
+      await loadClasses(); fef.style.display='none';
+    };
+  },50);
+
+  // Payment form
+  const payCard=el('div',{className:'card',style:'margin-bottom:14px;'});
+  payCard.innerHTML=`
+    <div style="font-weight:700;font-size:15px;color:var(--navy);margin-bottom:12px;">Record Fee Payment</div>
+    <div class="form-grid form-grid-4" style="align-items:flex-end;">
+      <div><label class="form-label">Student</label>
+        <select id="pay-student" class="form-select">
+          <option value="">-- Select Student --</option>
+          ${myStudents.map(s=>`<option value="${s.id}">${s.full_name}</option>`).join('')}
+        </select></div>
+      <div><label class="form-label">Amount (GH₵)</label><input type="number" id="pay-amount" class="form-input" placeholder="Enter amount" min="0"/></div>
+      <div><label class="form-label">Date</label><input type="date" id="pay-date" class="form-input" value="${new Date().toISOString().split('T')[0]}"/></div>
+      <div><button class="btn btn-success" id="pay-btn"><i class="ti ti-receipt"></i> Record & Print Receipt</button></div>
+    </div>`;
+  div.appendChild(payCard);
+  setTimeout(()=>{
+    const pb=document.getElementById('pay-btn');
+    if(pb) pb.onclick=async()=>{
+      const sid=document.getElementById('pay-student')?.value;
+      const amt=parseFloat(document.getElementById('pay-amount')?.value||0);
+      const dt=document.getElementById('pay-date')?.value;
+      if(!sid) return alert('Select a student');
+      if(!amt||amt<=0) return alert('Enter valid amount');
+      if(!dt) return alert('Select payment date');
+      const student=myStudents.find(s=>s.id==sid);
+      const payment=await api('POST',`/students/${sid}/payments`,{amount:amt,payment_date:dt});
+      await loadStudents();
+      // Print receipt
+      const updStudent={...student,fees_paid:parseFloat(student.fees_paid||0)+amt};
+      setState({printData:{type:'receipt',student:updStudent,payment,feeAmount:feeAmt,term:classInfo.fee_term}});
+    };
+  },50);
+
+  // Students fees table
+  const tableWrap=el('div',{className:'table-wrap'});
+  tableWrap.innerHTML=`<table><thead><tr>
+    <th>#</th><th>Student</th><th>Total Fee</th><th>Amount Paid</th><th>Balance</th><th>Status</th><th>Last Payment</th><th>Payment History</th>
+  </tr></thead><tbody>${myStudents.map((st,i)=>{
+    const paid=parseFloat(st.fees_paid||0);
+    const bal=Math.max(0,feeAmt-paid);
+    const done=bal<=0;
+    return `<tr>
+      <td style="color:var(--text3);font-weight:600;">${i+1}</td>
+      <td><strong style="color:var(--navy);">${st.full_name}</strong></td>
+      <td>${fmtMoney(feeAmt)}</td>
+      <td style="color:var(--green);font-weight:700;">${fmtMoney(paid)}</td>
+      <td style="color:${done?'var(--green)':'var(--red)'};font-weight:700;">${fmtMoney(bal)}</td>
+      <td><span class="badge" style="background:${done?'#dcfce7':'#fee2e2'};color:${done?'#166534':'#991b1b'};">${done?'✓ Completed':'Owing'}</span></td>
+      <td style="font-size:12px;color:${st.last_payment_date?'var(--green)':'var(--text3)'};">${st.last_payment_date?fmtDate(st.last_payment_date):'No payment'}</td>
+      <td style="font-size:12px;color:var(--text2);" id="hist-${st.id}">
+        <button class="btn btn-ghost btn-sm" onclick="loadPaymentHistory(${st.id})"><i class="ti ti-history"></i> View</button>
+      </td>
+    </tr>`;}).join('')}</tbody></table>`;
+  div.appendChild(tableWrap);
+  return div;
+}
+
+async function loadPaymentHistory(sid){
+  try{
+    const payments=await api('GET',`/students/${sid}/payments`);
+    const cell=document.getElementById(`hist-${sid}`);
+    if(!cell) return;
+    if(!payments.length){ cell.innerHTML='<span style="color:var(--text3);">No payments recorded</span>'; return; }
+    cell.innerHTML=payments.map(p=>`<div style="margin-bottom:3px;">
+      <strong style="color:var(--green);">${fmtMoney(p.amount)}</strong> on ${fmtDate(p.payment_date)}
+      ${currentUser?.role==='admin'?`<button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;" onclick="deletePayment(${p.id},${sid})">✕</button>`:''}
+    </div>`).join('');
+  }catch(e){ console.error(e); }
+}
+
+async function deletePayment(pid,sid){
+  if(!confirm('Remove this payment?')) return;
+  await api('DELETE',`/payments/${pid}`);
+  await loadStudents();
+  loadPaymentHistory(sid);
+}
+
+// ── ADMIN ─────────────────────────────────────────────────────────────────────
+function renderAdmin(){
+  const div=el('div');
+  const tabs=el('div',{className:'tabs'});
+  ['Class Teachers','Teacher Accounts'].forEach((l,i)=>{
+    const tb=el('button',{className:`tab-btn${i===0?' active':''}`,dataset:{tab:l}});
+    tb.textContent=l;
+    tb.onclick=()=>{ tabs.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); tb.classList.add('active');
+      div.querySelector('#admin-content').innerHTML=''; div.querySelector('#admin-content').appendChild(i===0?renderClassTeachers():renderTeacherAccounts()); };
+    tabs.appendChild(tb);
+  });
+  div.appendChild(tabs);
+  const content=el('div',{id:'admin-content'});
+  content.appendChild(renderClassTeachers());
+  div.appendChild(content);
+  return div;
+}
+
+function renderClassTeachers(){
+  const div=el('div');
+  const card=el('div',{className:'card',style:'margin-bottom:14px;'});
+  card.innerHTML=`<div style="font-weight:700;font-size:15px;color:var(--navy);margin-bottom:14px;">Assign Class Teachers</div>
+    <div class="form-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:14px;">
+      ${CLASSES.map(cls=>{
+        const ct=state.classes.find(c=>c.name===cls);
+        return `<div><label class="form-label">${cls}</label>
+          <input type="text" class="form-input ct-input" data-class="${cls}" value="${ct?.teacher_name||''}" placeholder="Enter teacher name"/></div>`;
+      }).join('')}
+    </div>
+    <button class="btn btn-success" id="save-ct-btn"><i class="ti ti-device-floppy"></i> Save All Assignments</button>`;
+  div.appendChild(card);
+  setTimeout(()=>{
+    const sb=document.getElementById('save-ct-btn');
+    if(sb) sb.onclick=async()=>{
+      const inputs=document.querySelectorAll('.ct-input');
+      for(const inp of inputs){
+        await api('PUT',`/classes/${encodeURIComponent(inp.dataset.class)}`,{teacher_name:inp.value});
+      }
+      await loadClasses();
+      sb.innerHTML='<i class="ti ti-check"></i> Saved!'; sb.style.background='#166534';
+      setTimeout(()=>{ sb.innerHTML='<i class="ti ti-device-floppy"></i> Save All Assignments'; sb.style.background=''; },2000);
+    };
+  },50);
+
+  // Current assignments table
+  const tableWrap=el('div',{className:'table-wrap'});
+  tableWrap.innerHTML=`<table><thead><tr><th>Class</th><th>Assigned Teacher</th><th>Fee/Term</th><th>Fee Term</th></tr></thead>
+    <tbody>${state.classes.map(c=>`<tr>
+      <td><strong style="color:var(--navy);">${c.name}</strong></td>
+      <td style="color:${c.teacher_name?'var(--text)':'var(--text3)'};">${c.teacher_name||'Not assigned'}</td>
+      <td>${fmtMoney(c.fee_amount)}</td>
+      <td style="font-size:12px;color:var(--text2);">${c.fee_term||'—'}</td>
+    </tr>`).join('')}</tbody></table>`;
+  div.appendChild(tableWrap);
+  return div;
+}
+
+function renderTeacherAccounts(){
+  const div=el('div');
+  const addCard=el('div',{className:'card',style:'margin-bottom:14px;'});
+  addCard.innerHTML=`<div style="font-weight:700;font-size:15px;color:var(--navy);margin-bottom:14px;">Add Teacher Account</div>
+    <div class="form-grid form-grid-4" style="margin-bottom:12px;">
+      <div><label class="form-label">Full Name</label><input type="text" id="t-name" class="form-input" placeholder="Teacher name"/></div>
+      <div><label class="form-label">Username</label><input type="text" id="t-user" class="form-input" placeholder="Login username"/></div>
+      <div><label class="form-label">Password</label><input type="password" id="t-pass" class="form-input" placeholder="Password"/></div>
+      <div><label class="form-label">Assigned Class</label>
+        <select id="t-class" class="form-select">${CLASSES.map(c=>`<option value="${c}">${c}</option>`).join('')}</select></div>
+    </div>
+    <button class="btn btn-primary" id="add-teacher-btn"><i class="ti ti-user-plus"></i> Add Teacher</button>`;
+  div.appendChild(addCard);
+  setTimeout(()=>{
+    document.getElementById('add-teacher-btn')?.addEventListener('click',async()=>{
+      const name=document.getElementById('t-name')?.value?.trim();
+      const user=document.getElementById('t-user')?.value?.trim();
+      const pass=document.getElementById('t-pass')?.value;
+      const cls=document.getElementById('t-class')?.value;
+      if(!name||!user||!pass) return alert('Fill all fields');
+      await api('POST','/users',{full_name:name,username:user,password:pass,role:'teacher',assigned_class:cls});
+      await loadUsers();
+      document.getElementById('t-name').value=''; document.getElementById('t-user').value=''; document.getElementById('t-pass').value='';
+    });
+  },50);
+
+  const tableWrap=el('div',{className:'table-wrap'});
+  tableWrap.innerHTML=`<table><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Assigned Class</th><th>Created</th><th>Action</th></tr></thead>
+    <tbody>${state.users.map(u=>`<tr>
+      <td><strong>${u.full_name}</strong></td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;">${u.username}</td>
+      <td><span class="badge" style="background:${u.role==='admin'?'#dbeafe':'#dcfce7'};color:${u.role==='admin'?'#1e40af':'#166534'};">${u.role}</span></td>
+      <td>${u.assigned_class||'—'}</td>
+      <td style="font-size:12px;color:var(--text2);">${fmtDate(u.created_at)}</td>
+      <td>${u.role!=='admin'?`<button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;" onclick="deleteUser(${u.id})"><i class="ti ti-trash"></i></button>`:'<span style="color:var(--text3);font-size:12px;">Protected</span>'}</td>
+    </tr>`).join('')}</tbody></table>`;
+  div.appendChild(tableWrap);
+  return div;
+}
+
+async function deleteUser(id){
+  if(!confirm('Remove this teacher account?')) return;
+  await api('DELETE',`/users/${id}`);
+  await loadUsers();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MODAL (Student Add/Edit)
+// ══════════════════════════════════════════════════════════════════════════════
+function renderModal(){
+  const overlay=el('div',{className:'modal-overlay'});
+  overlay.onclick=e=>{ if(e.target===overlay) setState({modal:null}); };
+  const m=state.modal;
+  if(m.type==='student'){
+    const s=m.student;
+    const box=el('div',{className:'modal-box'});
+    box.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--navy);">${s?'Edit Student':'Add New Student'}</div>
+        <button class="btn btn-ghost btn-sm" id="modal-close"><i class="ti ti-x"></i></button>
+      </div>
+      <form id="student-form">
+        ${s?`<input type="hidden" name="id" value="${s.id}"/>`:''}
+        <div class="form-grid form-grid-1" style="gap:12px;">
+          <div><label class="form-label">Full Name *</label><input name="full_name" class="form-input" required value="${s?.full_name||''}" placeholder="Student's full name"/></div>
+          <div class="form-grid form-grid-2">
+            <div><label class="form-label">Gender</label>
+              <select name="gender" class="form-select">
+                <option value="Male"${(s?.gender||'Male')==='Male'?' selected':''}>Male</option>
+                <option value="Female"${s?.gender==='Female'?' selected':''}>Female</option>
+              </select></div>
+            <div><label class="form-label">Date of Birth</label><input type="date" name="date_of_birth" class="form-input" value="${s?.date_of_birth?.split('T')[0]||''}"/></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:16px;">
+          <button type="submit" class="btn btn-success"><i class="ti ti-check"></i> Save Student</button>
+          <button type="button" class="btn btn-ghost" id="modal-cancel">Cancel</button>
+        </div>
+      </form>`;
+    setTimeout(()=>{
+      document.getElementById('modal-close')?.addEventListener('click',()=>setState({modal:null}));
+      document.getElementById('modal-cancel')?.addEventListener('click',()=>setState({modal:null}));
+      document.getElementById('student-form')?.addEventListener('submit',saveStudent);
+    },10);
+    overlay.appendChild(box);
+  }
+  return overlay;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PRINT OVERLAY
+// ══════════════════════════════════════════════════════════════════════════════
+function renderPrintOverlay(){
+  const overlay=el('div',{className:'print-overlay'});
+  const controls=el('div',{className:'print-controls no-print'});
+  const printBtn=el('button',{className:'btn btn-success',style:'font-size:15px;padding:10px 24px;box-shadow:0 4px 20px rgba(0,0,0,0.3);'});
+  printBtn.innerHTML='<i class="ti ti-printer"></i> Print';
+  const closeBtn=el('button',{className:'btn btn-ghost',style:'font-size:14px;padding:10px 20px;background:rgba(255,255,255,.9);'});
+  closeBtn.innerHTML='<i class="ti ti-x"></i> Close';
+  controls.appendChild(printBtn);
+  controls.appendChild(closeBtn);
+  closeBtn.onclick=()=>setState({printData:null});
+  overlay.appendChild(controls);
+
+  const pd=state.printData;
+  const printArea=el('div',{style:'background:white;max-width:210mm;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.4);'});
+
+  if(pd.type==='report'){
+    printArea.appendChild(buildTerminalReport(pd));
+  } else if(pd.type==='receipt'){
+    printArea.appendChild(buildFeeReceipt(pd));
+  }
+
+  overlay.appendChild(printArea);
+
+  printBtn.onclick=()=>{
+    const isLandscape=pd.type==='receipt';
+    const w=window.open('','_blank','width=900,height=700');
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;}
+      body{font-family:'DM Sans',sans-serif;background:white;}
+      @page{size:A4 ${isLandscape?'landscape':'portrait'};margin:10mm;}
+      .no-print{display:none!important;}
+      [contenteditable]{border-bottom:1px dashed #ccc;min-height:16px;display:inline-block;}
+    </style></head><body>${printArea.innerHTML}</body></html>`);
+    w.document.close();
+    setTimeout(()=>{w.print();},600);
+  };
+
+  return overlay;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// TERMINAL REPORT HTML
+// ══════════════════════════════════════════════════════════════════════════════
+function buildTerminalReport(pd){
+  const {student,term,myClass,subjects,upper,aMap,subPos,classInfo,notes,allCount}=pd;
+  const grandTotal=subjects.reduce((acc,sub)=>acc+parseFloat(aMap[sub]?.total||0),0);
+  const subjectScores={};
+  subjects.forEach(sub=>{ subjectScores[sub]=parseFloat(aMap[sub]?.total||0); });
+  const aggInfo=upper?computeAggregate(subjectScores,subjects):null;
+
+  // Logo SVG
+  const logoSVG=`<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="30" cy="30" r="28" fill="#0d1f36" stroke="#c9a84c" stroke-width="2"/>
+    <text x="30" y="38" text-anchor="middle" fill="#c9a84c" font-size="26" font-weight="900" font-family="serif">A</text>
+  </svg>`;
+
+  const div=el('div');
+  div.style.cssText='padding:12mm 14mm;font-family:"DM Sans",sans-serif;font-size:10.5px;color:#000;line-height:1.45;';
+  div.innerHTML=`
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:3px double #0d1f36;padding-bottom:10px;margin-bottom:12px;">
+    <div style="display:flex;align-items:center;gap:14px;flex:1;">
+      ${logoSVG}
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#0d1f36;letter-spacing:.5px;">${SCHOOL.name}</div>
+        <div style="font-size:10px;color:#0a5c46;font-style:italic;font-weight:600;">"${SCHOOL.motto}"</div>
+        <div style="font-size:9.5px;color:#555;">${SCHOOL.location} · ${SCHOOL.pobox} · Tel: ${SCHOOL.phone}</div>
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:800;color:#0d1f36;text-transform:uppercase;letter-spacing:1px;">Terminal Report</div>
+      <div style="font-size:11px;color:#555;margin-top:2px;">${term} · Academic Year 2024/2025</div>
+    </div>
+  </div>
+
+  <!-- Student Info -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;background:#f5f7fa;padding:8px 12px;border-radius:6px;border:1px solid #dde2ea;margin-bottom:10px;">
+    <div><strong>Student:</strong> ${student.full_name}</div>
+    <div><strong>Class:</strong> ${myClass}</div>
+    <div><strong>Position:</strong> <span style="font-weight:900;color:#0a5c46;">${student.position}${ordinal(student.position)}</span> / ${allCount}</div>
+    <div><strong>Gender:</strong> ${student.gender}</div>
+    <div><strong>Grand Total:</strong> <span style="font-weight:900;color:#0a5c46;">${grandTotal}</span></div>
+    <div><strong>Class Teacher:</strong> ${classInfo.teacher_name||'____________________'}</div>
+  </div>
+
+  <!-- Scores Table -->
+  <table style="width:100%;border-collapse:collapse;margin-bottom:10px;font-size:10.5px;">
+    <thead>
+      <tr style="background:#0d1f36;color:white;">
+        <th style="padding:6px 8px;text-align:left;border:1px solid #2a3f5c;font-weight:700;">Subject</th>
+        <th style="padding:6px 8px;text-align:center;border:1px solid #2a3f5c;font-weight:700;">Class Score<br/><small style="font-weight:400;">/50</small></th>
+        <th style="padding:6px 8px;text-align:center;border:1px solid #2a3f5c;font-weight:700;">Exam Score<br/><small style="font-weight:400;">/50</small></th>
+        <th style="padding:6px 8px;text-align:center;border:1px solid #2a3f5c;font-weight:700;">Total<br/><small style="font-weight:400;">/100</small></th>
+        <th style="padding:6px 8px;text-align:center;border:1px solid #2a3f5c;font-weight:700;">Position</th>
+        <th style="padding:6px 8px;text-align:center;border:1px solid #2a3f5c;font-weight:700;">Grade</th>
+        ${upper?`<th style="padding:6px 8px;text-align:center;border:1px solid #2a3f5c;font-weight:700;">Agg Grade</th>`:''}
+        <th style="padding:6px 8px;text-align:left;border:1px solid #2a3f5c;font-weight:700;">Remark</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${subjects.map((sub,i)=>{
+        const a=aMap[sub]||{};
+        const total=parseFloat(a.total||0);
+        const {grade,remark}=getGrade(total);
+        const aggGrade=upper?getAggGrade(total):'';
+        const isCore=upper&&CORE_SUBJECTS.includes(sub);
+        return `<tr style="background:${i%2===0?'white':'#f9fafb'};">
+          <td style="padding:5px 8px;border:1px solid #e0e4ea;font-weight:${isCore?'700':'400'};color:${isCore?'#0d1f36':'#333'};">${sub}${isCore?' *':''}</td>
+          <td style="padding:5px 8px;border:1px solid #e0e4ea;text-align:center;">${a.class_score!==undefined?a.class_score:'—'}</td>
+          <td style="padding:5px 8px;border:1px solid #e0e4ea;text-align:center;">${a.exam_score!==undefined?a.exam_score:'—'}</td>
+          <td style="padding:5px 8px;border:1px solid #e0e4ea;text-align:center;font-weight:900;color:${total>=80?'#0a5c46':total>=54?'#1a3a5c':'#b91c1c'};">${total||'—'}</td>
+          <td style="padding:5px 8px;border:1px solid #e0e4ea;text-align:center;">${total>0?(subPos[sub]||'—'):'—'}</td>
+          <td style="padding:5px 8px;border:1px solid #e0e4ea;text-align:center;font-weight:900;">${total>0?grade:'—'}</td>
+          ${upper?`<td style="padding:5px 8px;border:1px solid #e0e4ea;text-align:center;font-weight:900;color:#0d1f36;">${total>0?aggGrade:'—'}</td>`:''}
+          <td style="padding:5px 8px;border:1px solid #e0e4ea;font-size:10px;">${total>0?remark:'—'}</td>
+        </tr>`;}).join('')}
+      <tr style="background:#0d1f36;color:white;font-weight:900;">
+        <td colspan="${upper?5:4}" style="padding:6px 8px;border:1px solid #2a3f5c;">Grand Total</td>
+        <td colspan="${upper?4:4}" style="padding:6px 8px;border:1px solid #2a3f5c;text-align:center;font-size:14px;">${grandTotal}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Grading Key -->
+  <div style="background:#eef2f7;border:1px solid #c8d3e0;border-radius:5px;padding:5px 10px;margin-bottom:10px;font-size:9.5px;">
+    <strong>Grading Key:</strong>&nbsp;&nbsp;
+    <strong>A</strong>: 80–100 — Advance &nbsp;·&nbsp;
+    <strong>P</strong>: 68–79 — Proficient &nbsp;·&nbsp;
+    <strong>AP</strong>: 54–67 — Approaching Proficiency &nbsp;·&nbsp;
+    <strong>D</strong>: 40–53 — Developing &nbsp;·&nbsp;
+    <strong>B</strong>: 0–39 — Beginning
+  </div>
+
+  ${upper&&aggInfo?`
+  <!-- Aggregate Section -->
+  <div style="border:2px solid #0d1f36;border-radius:6px;padding:10px;margin-bottom:10px;">
+    <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:13px;color:#0d1f36;margin-bottom:8px;">BECE AGGREGATE CALCULATION <span style="font-size:10px;font-weight:400;">(* Core Subjects)</span></div>
+    <div style="display:flex;gap:14px;align-items:flex-start;">
+      <table style="flex:1;border-collapse:collapse;font-size:10.5px;">
+        <thead>
+          <tr style="background:#0d1f36;color:white;">
+            <th style="padding:5px 8px;border:1px solid #2a3f5c;text-align:left;">Subject</th>
+            <th style="padding:5px 8px;border:1px solid #2a3f5c;text-align:center;">Total</th>
+            <th style="padding:5px 8px;border:1px solid #2a3f5c;text-align:center;">Grade</th>
+            <th style="padding:5px 8px;border:1px solid #2a3f5c;text-align:center;">Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${aggInfo.all6.map((s,i)=>`<tr style="background:${i%2===0?'white':'#f9fafb'};">
+            <td style="padding:4px 8px;border:1px solid #e0e4ea;font-weight:700;">${s.subject}</td>
+            <td style="padding:4px 8px;border:1px solid #e0e4ea;text-align:center;font-weight:700;">${s.total}</td>
+            <td style="padding:4px 8px;border:1px solid #e0e4ea;text-align:center;font-weight:900;font-size:14px;">${s.grade}</td>
+            <td style="padding:4px 8px;border:1px solid #e0e4ea;text-align:center;font-weight:700;color:${CORE_SUBJECTS.includes(s.subject)?'#0a5c46':'#c9a84c'};">
+              ${CORE_SUBJECTS.includes(s.subject)?'Core':'Best Elective'}</td>
+          </tr>`).join('')}
+          <tr style="background:#0d1f36;color:white;font-weight:900;">
+            <td colspan="2" style="padding:6px 8px;border:1px solid #2a3f5c;font-size:12px;">TOTAL AGGREGATE</td>
+            <td colspan="2" style="padding:6px 8px;border:1px solid #2a3f5c;text-align:center;font-size:20px;">${aggInfo.aggregateSum}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:9px;color:#555;width:145px;flex-shrink:0;padding:4px 0;">
+        <div style="font-weight:700;margin-bottom:4px;font-size:9.5px;">Aggregate Scale:</div>
+        <div>Grade 1 (90-100): Excellent</div><div>Grade 2 (80-89): Very Good</div>
+        <div>Grade 3 (70-79): Credit</div><div>Grade 4 (60-69): Credit</div>
+        <div>Grade 5 (55-59): Pass</div><div>Grade 6 (50-54): Pass</div>
+        <div>Grade 7 (40-49)</div><div>Grade 8 (35-39)</div>
+        <div>Grade 9 (0-34): Fail</div>
+      </div>
+    </div>
+  </div>`:''}
+
+  <!-- Remarks -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+    <div style="border:1px solid #cdd5e0;border-radius:5px;padding:7px 9px;">
+      <div style="font-weight:800;font-size:10.5px;color:#0d1f36;margin-bottom:4px;">Student Interest / Abilities:</div>
+      <div contenteditable="true" style="min-height:36px;font-size:10.5px;border-bottom:1px dashed #bbb;outline:none;">${notes?.interest||''}</div>
+    </div>
+    <div style="border:1px solid #cdd5e0;border-radius:5px;padding:7px 9px;">
+      <div style="font-weight:800;font-size:10.5px;color:#0d1f36;margin-bottom:4px;">Class Teacher's Remark:</div>
+      <div contenteditable="true" style="min-height:36px;font-size:10.5px;border-bottom:1px dashed #bbb;outline:none;">${notes?.teacher_remark||''}</div>
+    </div>
+    <div style="border:1px solid #cdd5e0;border-radius:5px;padding:7px 9px;">
+      <div style="font-weight:800;font-size:10.5px;color:#0d1f36;margin-bottom:5px;">Attendance:</div>
+      <div style="display:flex;gap:18px;font-size:10.5px;">
+        <div>Days Present: <span contenteditable="true" style="display:inline-block;min-width:30px;border-bottom:1px solid #333;outline:none;">${notes?.days_present||''}</span></div>
+        <div>Days Absent: <span contenteditable="true" style="display:inline-block;min-width:30px;border-bottom:1px solid #333;outline:none;">${notes?.days_absent||''}</span></div>
+      </div>
+    </div>
+    <div style="border:1px solid #cdd5e0;border-radius:5px;padding:7px 9px;">
+      <div style="font-weight:800;font-size:10.5px;color:#0d1f36;margin-bottom:4px;">Student Conduct:</div>
+      <div contenteditable="true" style="min-height:36px;font-size:10.5px;border-bottom:1px dashed #bbb;outline:none;">${notes?.conduct||''}</div>
+    </div>
+  </div>
+
+  <!-- Signatures -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:18px;padding-top:10px;border-top:1px solid #ddd;">
+    ${['Class Teacher','Head Teacher / Principal','Parent / Guardian'].map(l=>`<div style="text-align:center;">
+      <div style="height:28px;border-bottom:1px solid #333;margin-bottom:4px;"></div>
+      <div style="font-size:10.5px;font-weight:700;">${l}</div>
+      <div style="font-size:9.5px;color:#888;">Date: _______________</div>
+    </div>`).join('')}
+  </div>
+
+  <div style="text-align:center;margin-top:12px;font-size:8.5px;color:#aaa;border-top:1px solid #eee;padding-top:7px;">
+    ${SCHOOL.name} · ${SCHOOL.location} · ${SCHOOL.pobox} · Tel: ${SCHOOL.phone} · "${SCHOOL.motto}"
+  </div>`;
+  return div;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// FEE RECEIPT HTML (Portrait Envelope / DL size)
+// ══════════════════════════════════════════════════════════════════════════════
+function buildFeeReceipt(pd){
+  const {student,payment,feeAmount,term}=pd;
+  const totalPaid=parseFloat(student.fees_paid||0);
+  const balance=Math.max(0,feeAmount-totalPaid);
+  const done=balance<=0;
+  const words=numberToWords(Math.round(payment.amount));
+  const receiptNo='RCP-'+payment.id;
+
+  const logoSVG=`<svg width="55" height="55" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="30" cy="30" r="28" fill="#0d1f36" stroke="#c9a84c" stroke-width="2"/>
+    <text x="30" y="38" text-anchor="middle" fill="#c9a84c" font-size="26" font-weight="900" font-family="serif">A</text>
+  </svg>`;
+
+  const div=el('div');
+  div.style.cssText='padding:14mm 16mm;font-family:"DM Sans",sans-serif;font-size:12px;color:#000;min-height:200mm;';
+  div.innerHTML=`
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:3px double #0d1f36;padding-bottom:12px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      ${logoSVG}
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#0d1f36;">${SCHOOL.name}</div>
+        <div style="font-size:10px;font-style:italic;color:#0a5c46;font-weight:600;">"${SCHOOL.motto}"</div>
+        <div style="font-size:10px;color:#666;">${SCHOOL.location} · ${SCHOOL.pobox} · Tel: ${SCHOOL.phone}</div>
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#0a5c46;text-transform:uppercase;letter-spacing:1px;">Official Receipt</div>
+      <div style="font-size:11px;color:#888;margin-top:2px;">Receipt No: <strong>${receiptNo}</strong></div>
+      <div style="font-size:11px;color:#888;">Date Issued: <strong>${fmtDate(payment.payment_date)}</strong></div>
+    </div>
+  </div>
+
+  <!-- Student Info -->
+  <div style="background:#f5f7fa;border:1px solid #e0e4ea;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;">
+    <div><strong>Received From:</strong><br/><span style="font-weight:900;color:#0d1f36;font-size:13px;">${student.full_name}</span></div>
+    <div><strong>Class:</strong><br/>${student.class_name}</div>
+    <div><strong>Term:</strong><br/>${term||'—'}</div>
+  </div>
+
+  <!-- Amount Table -->
+  <table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12px;">
+    <thead>
+      <tr style="background:#0d1f36;color:white;">
+        <th style="padding:9px 14px;text-align:left;font-weight:700;border:1px solid #2a3f5c;">Description</th>
+        <th style="padding:9px 14px;text-align:right;font-weight:700;border:1px solid #2a3f5c;">Amount (GH₵)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:11px 14px;border:1px solid #eee;">School Fees Payment — ${term||'—'}</td>
+        <td style="padding:11px 14px;border:1px solid #eee;text-align:right;font-weight:900;font-size:18px;color:#0a5c46;">GH₵${parseFloat(payment.amount).toLocaleString('en',{minimumFractionDigits:2})}</td>
+      </tr>
+      <tr style="background:#f0f7f5;">
+        <td style="padding:8px 14px;border:1px solid #eee;font-style:italic;color:#555;font-size:11px;">Amount in Words:</td>
+        <td style="padding:8px 14px;border:1px solid #eee;text-align:right;font-style:italic;font-size:11px;color:#555;">${words} Ghana Cedis Only</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 14px;border:1px solid #eee;color:#555;">Total Fees Payable (This Term)</td>
+        <td style="padding:9px 14px;border:1px solid #eee;text-align:right;">GH₵${parseFloat(feeAmount||0).toLocaleString('en',{minimumFractionDigits:2})}</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 14px;border:1px solid #eee;color:#0a5c46;font-weight:700;">Total Paid (Cumulative)</td>
+        <td style="padding:9px 14px;border:1px solid #eee;text-align:right;font-weight:900;color:#0a5c46;">GH₵${totalPaid.toLocaleString('en',{minimumFractionDigits:2})}</td>
+      </tr>
+      <tr style="background:${done?'#dcfce7':'#fff7ed'};">
+        <td style="padding:11px 14px;font-weight:900;color:${done?'#166534':'#c2410c'};font-size:13px;border:1px solid ${done?'#bbf7d0':'#fed7aa'};">
+          ${done?'✓ FULLY PAID — COMPLETED':'Outstanding Balance'}
+        </td>
+        <td style="padding:11px 14px;text-align:right;font-weight:900;font-size:18px;color:${done?'#166534':'#b91c1c'};border:1px solid ${done?'#bbf7d0':'#fed7aa'};">
+          GH₵${balance.toLocaleString('en',{minimumFractionDigits:2})}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Signatures -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px;margin-top:24px;padding-top:12px;border-top:1px solid #ddd;">
+    ${['Cashier / Bursar','Head Teacher','Parent / Guardian'].map(l=>`<div style="text-align:center;">
+      <div style="height:30px;border-bottom:1px solid #333;margin-bottom:4px;"></div>
+      <div style="font-size:11px;font-weight:700;">${l}</div>
+      <div style="font-size:10px;color:#888;">Date: _______________</div>
+    </div>`).join('')}
+  </div>
+
+  <div style="text-align:center;margin-top:14px;font-size:9px;color:#aaa;font-style:italic;border-top:1px solid #f0f0f0;padding-top:8px;">
+    This is an official receipt — Please retain for your records &nbsp;|&nbsp; ${SCHOOL.name} · "${SCHOOL.motto}"
+  </div>`;
+  return div;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// DATA LOADING
+// ══════════════════════════════════════════════════════════════════════════════
+async function loadInitialData(){
+  try {
+    await Promise.all([loadClasses(), loadStudents(), loadUsers()]);
+    render();
+  } catch(e){ console.error(e); }
+}
+
+async function loadClasses(){
+  const rows=await api('GET','/classes');
+  setState({classes:rows});
+}
+async function loadStudents(){
+  const isAdmin=currentUser?.role==='admin';
+  let url='/students';
+  if(!isAdmin) url+=`?class_name=${encodeURIComponent(currentUser?.assignedClass||'')}`;
+  const rows=await api('GET',url);
+  setState({students:rows});
+}
+async function loadAssessments(){
+  const myClass=state.selectedClass;
+  const term=state.selectedTerm;
+  const rows=await api('GET',`/assessments?class_name=${encodeURIComponent(myClass)}&term=${encodeURIComponent(term)}`);
+  setState({assessments:[...state.assessments.filter(a=>!(a.class_name===myClass&&a.term===term)),...rows]});
+}
+async function loadUsers(){
+  if(currentUser?.role!=='admin') return;
+  const rows=await api('GET','/users');
+  setState({users:rows});
+}
+
+async function loadPageData(page){
+  try{
+    if(page==='students'||page==='fees') await loadStudents();
+    if(page==='assessment'||page==='reports') await Promise.all([loadStudents(),loadAssessments()]);
+    if(page==='admin') { await loadClasses(); await loadUsers(); }
+    if(page==='dashboard') { await Promise.all([loadStudents(),loadClasses()]); }
+    render();
+  } catch(e){ console.error(e); }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════════════════════════
+function el(tag, attrs={}, html){
+  const e=document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v])=>{
+    if(k==='className') e.className=v;
+    else if(k==='style') e.style.cssText=v;
+    else if(k==='dataset') Object.entries(v).forEach(([dk,dv])=>e.dataset[dk]=dv);
+    else e.setAttribute(k,v);
+  });
+  if(html!==undefined) e.innerHTML=html;
+  return e;
+}
+
+function emptyState(icon,title,sub){
+  const d=el('div',{style:'text-align:center;padding:3rem;color:var(--text3);background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);'});
+  d.innerHTML=`<i class="ti ${icon}" style="font-size:48px;display:block;margin-bottom:14px;"></i>
+    <div style="font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text2);">${title}</div>
+    <div style="font-size:13px;">${sub||''}</div>`;
+  return d;
+}
+
+function ordinal(n){ const s=['th','st','nd','rd'],v=n%100; return s[(v-20)%10]||s[v]||s[0]; }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════════════════════════════════════
+if(authToken && currentUser){
+  setState({page:'dashboard'});
+  loadInitialData();
+} else {
+  render();
+}
+</script>
+</body>
+</html>
