@@ -295,5 +295,6 @@ app.use((err, req, res, next) => {
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => console.log(`Aleyart Academy API running on port ${PORT}`));
+const HOST = '0.0.0.0';
+app.listen(PORT, HOST, () => console.log(`Aleyart Academy API running on port ${PORT}`));
 module.exports = app;
