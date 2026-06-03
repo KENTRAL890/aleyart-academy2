@@ -8,6 +8,8 @@ const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+console.log('Starting on port:', PORT);
+console.log('Environment:', process.env.NODE_ENV);
 const JWT_SECRET = process.env.JWT_SECRET || 'aleyart_secret_2024_seekingwisdom';
 
 // ─── DB Connection ────────────────────────────────────────────────────────────
@@ -295,6 +297,7 @@ app.use((err, req, res, next) => {
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────
-const HOST = '0.0.0.0';
-app.listen(PORT, HOST, () => console.log(`Aleyart Academy API running on port ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Aleyart Academy API running on port ${PORT}`);
+});
 module.exports = app;
