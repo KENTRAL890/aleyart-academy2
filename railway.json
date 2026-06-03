@@ -1,10 +1,9 @@
 {
   "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "cd backend && npm install"
+    "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "cd backend && node server.js",
+    "startCommand": "node backend/server.js",
     "restartPolicyType": "ON_FAILURE"
   }
 }
